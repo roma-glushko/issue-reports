@@ -1,0 +1,14 @@
+print("""
+-----------------------------------------------------------------
+✨ Reproducible Examples
+-----------------------------------------------------------------
+""".strip())
+
+docker_build(
+    'sample/service:dev',
+    '.',
+)
+
+k8s_yaml('k8s.yaml')
+
+k8s_resource('scheduler', port_forwards='8801', labels=['components'])
