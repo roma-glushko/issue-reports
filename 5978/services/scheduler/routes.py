@@ -19,7 +19,7 @@ class SchedulerInfo(BaseModel):
 
 @router.get("/")
 async def info(
-        request: Request,
+    request: Request,
 ) -> SchedulerInfo:
     return SchedulerInfo(
         worker_image=config.worker_image,

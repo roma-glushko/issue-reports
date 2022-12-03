@@ -19,7 +19,7 @@ async def on_startup(app: FastAPI) -> None:
 app = FastAPI(title="scheduler", debug=True)
 
 app.include_router(router)
-app.on_event('startup')(partial(on_startup, app))
+app.on_event("startup")(partial(on_startup, app))
 
 
 if __name__ == "__main__":

@@ -18,6 +18,8 @@ kubernetes-asyncio = "^24.2.2"
 
 [tool.poetry.dev-dependencies]
 ruff = "^0.0.152"
+mypy = "^0.991"
+black = "^22.10.0"
 
 [tool.ruff]
 line-length = 120

@@ -1,5 +1,6 @@
 CLUSTER?=example
 REGISTRY_PORT?=8800
+SOURCE?=services
 
 .PHONY: help
 
@@ -21,4 +22,6 @@ image-build: ## Build the image
 	@docker build -t sample/service:dev -f Dockerfile .
 
 lint: ## Lint source code
-	@ruff --fix services
+	@black $(SOURCE)
+	@ruff --fix $(SOURCE)
+	@mypy --pretty $(SOURCE)

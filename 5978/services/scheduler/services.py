@@ -3,25 +3,30 @@ from typing import Optional
 from kubernetes_asyncio import client
 from kubernetes_asyncio.client.api_client import ApiClient
 
+
 async def create_worker_deployment(
-        namespace: str,
-        name: str,
-        image: str,
-        port: int = 8802,
-        env: Optional[dict[str, str]] = None
+    namespace: str,
+    name: str,
+    image: str,
+    port: int = 8802,
+    env: Optional[dict[str, str]] = None,
 ) -> client.V1Deployment:
     labels: dict[str, str] = {
-        'app.kubernetes.io/component': 'worker',
-        'app.kubernetes.io/part-of': 'sample5978',
+        "app.kubernetes.io/component": "worker",
+        "app.kubernetes.io/part-of": "sample5978",
     }
 
-    env_vars: list[client.V1EnvVar] = [
-        client.V1EnvVar(
-            name=name,
-            value=value,
-        )
-        for name, value in env.items()
-    ]
+    env_vars: list[client.V1EnvVar] = (
+        [
+            client.V1EnvVar(
+                name=name,
+                value=value,
+            )
+            for name, value in env.items()
+        ]
+        if env
+        else None
+    )
 
     container = client.V1Container(
         name="worker",
@@ -72,7 +77,7 @@ async def deploy_worker(namespace: str, worker_image: str, worker_id: str) -> No
             env={
                 "WORKER_ID": worker_id,
                 "WORKER_IMAGE": worker_image,
-            }
+            },
         )
 
         apps_api.create_namespaced_deployment(
