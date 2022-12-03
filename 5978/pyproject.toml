@@ -23,7 +23,14 @@ ruff = "^0.0.152"
 line-length = 120
 
 # Enable Pyflakes `E` and `F` codes by default.
-select = ["E", "F"]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
 ignore = []
 
 # Exclude a variety of commonly ignored directories.

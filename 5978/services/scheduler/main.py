@@ -1,11 +1,11 @@
+import logging
 from functools import partial
 
 import uvicorn
 from fastapi import FastAPI
-from services.scheduler.routes import router
-import logging
-
 from kubernetes_asyncio import config
+
+from services.scheduler.routes import router
 
 logger = logging.getLogger(__name__)
 
