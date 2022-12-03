@@ -19,3 +19,6 @@ cluster-stop: ## Stop the cluster
 
 image-build: ## Build the image
 	@docker build -t sample/service:dev -f Dockerfile .
+
+lint: ## Lint source code
+	@ruff --fix services
