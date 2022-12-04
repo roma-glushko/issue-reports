@@ -28,14 +28,15 @@ async def info(
     )
 
 
-@router.post("/worker/")
+@router.post("/worker/{worker_id}/")
 async def start_worker(
     request: Request,
+    worker_id: str
 ) -> Response:
     await deploy_worker(
         namespace=config.namespace,
         worker_image=config.worker_image,
-        worker_id=str(uuid.uuid4()),
+        worker_id=worker_id,
     )
 
     return Response(status_code=status.HTTP_202_ACCEPTED)
