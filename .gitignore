@@ -1,4 +1,5 @@
 .idea
 
 .ruff_cache
+.mypy_cache
 *.pyc

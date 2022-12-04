@@ -36,7 +36,7 @@ spec:
       containers:
       - name: scheduler
         image: sample/service:dev
-        command: ["python", "-m", "services.scheduler", "--port=8801"]
+        command: ["python", "-m", "services.scheduler.main"]
         ports:
         - containerPort: 8801
           protocol: TCP

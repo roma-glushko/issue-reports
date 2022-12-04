@@ -31,6 +31,7 @@ async def create_worker_deployment(
     container = client.V1Container(
         name="worker",
         image=image,
+        command=["python", "-m", "services.worker.main"],
         ports=[
             client.V1ContainerPort(container_port=port),
         ],

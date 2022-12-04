@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 async def on_startup(app: FastAPI) -> None:
     logger.debug("Starting the scheduler service..")
 
-    await config.load_kube_config()
+    config.load_incluster_config()
 
 
 app = FastAPI(title="scheduler", debug=True)
@@ -23,4 +23,4 @@ app.on_event("startup")(partial(on_startup, app))
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", port=8801, log_level="debug")
+    uvicorn.run("services.scheduler.main:app", port=8801, log_level="debug")

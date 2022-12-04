@@ -7,10 +7,15 @@ RUN set -ex && \
 
 RUN pip install wheel "poetry==$POETRY_VERSION"
 
+ENV PYTHONPATH="/app/:$PYTHONPATH"
+
 WORKDIR /app
 COPY poetry.lock pyproject.toml /app/
 
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-dev --no-interaction --no-ansi
+RUN poetry export --format=requirements.txt > requirements.txt
+RUN pip install -r requirements.txt
+
+#RUN poetry config virtualenvs.create false \
+#  && poetry install --no-dev --no-interaction --no-ansi
 
 COPY . /app
