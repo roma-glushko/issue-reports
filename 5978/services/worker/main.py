@@ -13,4 +13,9 @@ app.include_router(router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("services.worker.main:app", port=8802, log_level="debug")
+    uvicorn.run(
+        "services.worker.main:app",
+        port=8802,
+        log_level="debug",
+        reload=True,
+    )

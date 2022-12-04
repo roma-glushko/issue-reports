@@ -6,7 +6,12 @@ print("""
 
 docker_build(
     'sample/service:dev',
-    '.',
+    context='.',
+    dockerfile='./Dockerfile',
+    live_update=[
+        sync('./services/', '/app/services'),
+        run('poetry install --no-dev', trigger=['pyproject.toml']),
+    ],
     match_in_env_vars=True,
 )
 

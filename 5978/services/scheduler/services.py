@@ -40,6 +40,13 @@ async def create_worker_deployment(
             limits={"cpu": "500m", "memory": "500Mi"},
         ),
         env=env_vars,
+        # security_context=client.V1SecurityContext(
+        #     # allow_privilege_escalation=False,
+        #     # privileged=False,
+        #     # seccomp_profile=client.V1SeccompProfile(
+        #     #     type="RuntimeDefault",
+        #     # )
+        # )
     )
 
     template = client.V1PodTemplateSpec(
