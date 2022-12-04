@@ -16,7 +16,7 @@ class WorkerInfo(BaseModel):
     image: str
 
 
-@router.get("/", status_code=status.HTTP_200_ACCEPTED)
+@router.get("/", status_code=status.HTTP_200_OK)
 async def info(
     request: Request,
 ) -> WorkerInfo:

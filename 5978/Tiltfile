@@ -7,6 +7,7 @@ print("""
 docker_build(
     'sample/service:dev',
     '.',
+    match_in_env_vars=True,
 )
 
 k8s_yaml('k8s.yaml')

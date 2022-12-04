@@ -15,6 +15,7 @@ router = APIRouter()
 
 class SchedulerInfo(BaseModel):
     worker_image: str
+    worker_namespace: str
 
 
 @router.get("/")
@@ -22,6 +23,7 @@ async def info(
     request: Request,
 ) -> SchedulerInfo:
     return SchedulerInfo(
+        worker_namespace=config.namespace,
         worker_image=config.worker_image,
     )
 
@@ -40,7 +42,7 @@ async def start_worker(
 
 
 @router.delete("/worker/{worker_id}/")
-async def stop_worker(
+async def stop_worker_by_id(
     request: Request,
     worker_id: str,
 ) -> Response:

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sample
+  name: app
   labels:
     app.kubernetes.io/name: sample
     app.kubernetes.io/instance: sample
@@ -13,7 +13,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scheduler
-  namespace: sample
+  namespace: app
   labels:
     app.kubernetes.io/name: sample
     app.kubernetes.io/instance: sample
@@ -44,13 +44,13 @@ spec:
         - name: WORKER_IMAGE
           value: sample/service:dev
         - name: WORKER_NAMESPACE
-          value: sample
+          value: app
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: scheduler
-  namespace: sample
+  namespace: app
 spec:
   type: ClusterIP
   selector:
@@ -65,10 +65,34 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: scheduler-account
-  namespace: sample
+  namespace: app
   labels:
     app.kubernetes.io/name: sample
     app.kubernetes.io/instance: sample
     app.kubernetes.io/version: "1.0.0"
     app.kubernetes.io/component: scheduler
     app.kubernetes.io/part-of: sample5978
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: worker-scheduler
+  namespace: app
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: app
+subjects:
+- kind: ServiceAccount
+  name: scheduler-account
+  namespace: app
+roleRef:
+  kind: Role
+  name: worker-scheduler
+  apiGroup: "rbac.authorization.k8s.io"

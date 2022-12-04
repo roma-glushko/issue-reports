@@ -81,7 +81,7 @@ async def deploy_worker(namespace: str, worker_image: str, worker_id: str) -> No
             },
         )
 
-        apps_api.create_namespaced_deployment(
+        await apps_api.create_namespaced_deployment(
             namespace=namespace,
             body=deployment,
         )
@@ -91,7 +91,7 @@ async def stop_worker(namespace: str, worker_id: str) -> None:
     async with ApiClient() as api_client:
         apps_api = client.AppsV1Api(api_client)
 
-        apps_api.delete_namespaced_deployment(
+        await apps_api.delete_namespaced_deployment(
             namespace=namespace,
             name=f"worker-{worker_id}",
             body=client.V1DeleteOptions(
