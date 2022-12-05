@@ -17,4 +17,11 @@ docker_build(
 
 k8s_yaml('k8s.yaml')
 
-k8s_resource('scheduler', port_forwards='8801', labels=['components'])
+k8s_resource(
+    'scheduler',
+    port_forwards='8801',
+    labels=['components'],
+    extra_pod_selectors=[
+        {"app.kubernetes.io/component": "worker", "app.kubernetes.io/part-of": "sample5978"},
+    ],
+)
