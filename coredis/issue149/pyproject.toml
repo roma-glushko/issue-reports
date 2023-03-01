@@ -6,6 +6,7 @@ authors = ["Roman Glushko <roman.glushko.m@gmail.com>"]
 license = "MIT"
 
 packages = [
+    { include = "common" },
     { include = "services" },
 ]
 

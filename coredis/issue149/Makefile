@@ -1,6 +1,6 @@
-CLUSTER?=kiwi
+CLUSTER?=coredis
 REGISTRY_PORT?=8800
-SOURCE?=services
+SOURCE?=common services
 
 .PHONY: help
 
@@ -18,10 +18,13 @@ cluster-ctx:  ## Configure the cluster context
 cluster-stop: ## Stop the cluster
 	@k3d cluster delete $(CLUSTER)
 
+start: cluster-ctx ## Start the whole system
+	@tilt up
+
 image-build: ## Build the image
 	@docker build -t sample/service:dev -f Dockerfile .
 
 lint: ## Lint source code
-	@black $(SOURCE)
-	@ruff --fix $(SOURCE)
-	@mypy --pretty $(SOURCE)
+	@poetry run black $(SOURCE)
+	@poetry run ruff --fix $(SOURCE)
+	@poetry run mypy --pretty $(SOURCE)

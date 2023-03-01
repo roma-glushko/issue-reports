@@ -1,5 +1,5 @@
 import logging
-from typing import Union, Optional
+from typing import Optional, Union
 
 from coredis import RedisCluster
 from coredis import exceptions as RedisExceptions
@@ -16,10 +16,13 @@ class BrokerConfig(BaseSettings):
     password: Optional[SecretStr] = Field(default=None, env="BROKER_PASSWORD")
 
     db: Union[str, int] = Field(
-        default="0", env="BROKER_DB",
+        default="0",
+        env="BROKER_DB",
     )
 
-    cluster_require_full_coverage: bool = Field(default=False, env="BROKER_REQUIRE_FULL_COVERAGE")
+    cluster_require_full_coverage: bool = Field(
+        default=False, env="BROKER_REQUIRE_FULL_COVERAGE"
+    )
     read_from_replicas: bool = Field(default=False, env="BROKER_READ_FROM_REPLICAS")
 
 

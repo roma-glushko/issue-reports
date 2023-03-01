@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coredis
+  labels:
+    app.kubernetes.io/name: coredis-149
+    app.kubernetes.io/instance: coredis-149
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/part-of: coredis-149
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heartbeat
+  namespace: coredis
+  labels:
+    app.kubernetes.io/name: coredis-149
+    app.kubernetes.io/instance: coredis-149
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: heartbeat
+    app.kubernetes.io/part-of: coredis-149
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: heartbeat
+      app.kubernetes.io/part-of: coredis-149
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: heartbeat
+        app.kubernetes.io/part-of: coredis-149
+    spec:
+      containers:
+      - name: heartbeat
+        image: sample/service:dev
+        command: ["python", "-m", "services.heartbeat.main"]
+        env:
+        - name: BROKER_HOST
+          value: "redis"
+        - name: BROKER_PORT
+          value: "6379"
+        - name: BROKER_USERNAME
+          value: ""
+        - name: BROKER_PASSWORD
+          value: "r8d1sclust8r"
+        - name: BROKER_DB
+          value: "0"
+        - name: HEARTBEAT_CHANNEL
+          value: "channels/heartbeat"
+        - name: HEARTBEAT_PUBLISH_EVERY_SEC
+          value: "1"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracker
+  namespace: coredis
+  labels:
+    app.kubernetes.io/name: coredis-149
+    app.kubernetes.io/instance: coredis-149
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: tracker
+    app.kubernetes.io/part-of: coredis-149
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: tracker
+      app.kubernetes.io/part-of: coredis-149
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: tracker
+        app.kubernetes.io/part-of: coredis-149
+    spec:
+      containers:
+      - name: heartbeat
+        image: sample/service:dev
+        command: ["python", "-m", "services.tracker.main"]
+        env:
+          - name: BROKER_HOST
+            value: "redis"
+          - name: BROKER_PORT
+            value: "6379"
+          - name: BROKER_USERNAME
+            value: ""
+          - name: BROKER_PASSWORD
+            value: "r8d1sclust8r"
+          - name: BROKER_DB
+            value: "0"
+          - name: TRACKER_CHANNEL
+            value: "channels/heartbeat"
