@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 
 import coredis.exceptions
 from coredis import RedisCluster
@@ -7,6 +8,12 @@ from coredis import RedisCluster
 from common.broker import create_broker_client
 from common.protocol import Heartbeat
 from services.heartbeat.config import Config
+
+logging.basicConfig(
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    stream=sys.stdout,
+    level=logging.DEBUG,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +35,7 @@ async def heartbeat(
             logger.debug("CancelledError: Stopping heartbeat")
             break
         except coredis.exceptions.ConnectionError as e:
-            logger.debug(f"ConnectionError: Could not publish the message ({e!r}")
+            logger.warning(f"ConnectionError: Could not publish a message ({e!r}")
 
 
 async def on_startup(config: Config) -> None:
