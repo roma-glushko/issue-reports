@@ -1,0 +1,43 @@
+print("""
+-----------------------------------------------------------------
+✨ Kiwi - a Sample App to reproduce coredis#149
+-----------------------------------------------------------------
+""".strip())
+
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+
+docker_build(
+    'sample/service:dev',
+    context='.',
+    dockerfile='./Dockerfile',
+    ignore=['.data/', '.filesystems/', './services/websocket/'],
+    live_update=[
+        sync('./common/', '/app/common'),
+        sync('./services/', '/app/services'),
+        run('poetry install --no-dev', trigger=['pyproject.toml']),
+    ],
+    match_in_env_vars=True,
+)
+
+k8s_yaml('k8s.yaml')
+
+k8s_resource(
+    'heartbeat',
+    labels=['services'],
+)
+
+k8s_resource(
+    'tracker',
+    labels=['services'],
+)
+
+
+helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
+helm_resource(
+    'redis',
+    'bitnami/redis-cluster',
+    namespace='coredis',
+    port_forwards='6380:6379',
+    labels=['infrastructure'],
+    flags=['--set', 'fullnameOverride=redis', '--set', 'password=r8d1sclust8r'],
+)
