@@ -2,7 +2,7 @@
 
 FROM python:3.9.15-alpine
 
-ARG POETRY_VERSION=1.1.14
+ARG POETRY_VERSION=1.3.1
 
 RUN set -ex && \
    apk add --no-cache gcc musl-dev
