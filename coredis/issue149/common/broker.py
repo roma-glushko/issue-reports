@@ -24,7 +24,7 @@ class BrokerConfig(BaseSettings):
         default=False, env="BROKER_REQUIRE_FULL_COVERAGE"
     )
     read_from_replicas: bool = Field(default=False, env="BROKER_READ_FROM_REPLICAS")
-
+    follow_cluster: bool = Field(default=False, env="BROKER_FOLLOW_CLUSTER")
 
 def create_redis_cluster_client(broker_config: BrokerConfig) -> RedisCluster:
     username: Optional[SecretStr] = broker_config.username
@@ -38,6 +38,7 @@ def create_redis_cluster_client(broker_config: BrokerConfig) -> RedisCluster:
         password=password.get_secret_value() if password else None,
         skip_full_coverage_check=not broker_config.cluster_require_full_coverage,
         read_from_replicas=broker_config.read_from_replicas,
+        nodemanager_follow_cluster=broker_config.follow_cluster,
     )
 
     return cluster_client
