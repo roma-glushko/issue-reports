@@ -39,6 +39,7 @@ def create_redis_cluster_client(broker_config: BrokerConfig) -> RedisCluster:
         skip_full_coverage_check=not broker_config.cluster_require_full_coverage,
         read_from_replicas=broker_config.read_from_replicas,
         nodemanager_follow_cluster=broker_config.follow_cluster,
+        connect_timeout=1,
     )
 
     return cluster_client
