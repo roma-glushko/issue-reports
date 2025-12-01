@@ -1,0 +1,40 @@
+services:
+  tyk-gateway:
+    image: repro/repro/tyk-api-gateway:latest
+    build:
+      context: repro
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+    environment:
+      - TYK_LOGLEVEL=debug
+      - TYK_GW_STORAGE_TYPE=redis
+      - TYK_GW_STORAGE_HOST=tyk-redis
+      - TYK_GW_STORAGE_PORT=6379
+      - TYK_GW_STORAGE_HOSTS=
+      - TYK_GW_STORAGE_USERNAME=
+      - TYK_GW_STORAGE_PASSWORD=
+      - TYK_GW_STORAGE_DATABASE=0
+      - TYK_GW_STORAGE_MAXIDLE=3000
+      - TYK_GW_STORAGE_MAXACTIVE=5000
+      - TYK_GW_STORAGE_ENABLECLUSTER=false
+    networks:
+      - tyk
+    depends_on:
+      - tyk-redis
+
+  tyk-redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - tyk
+
+volumes:
+  redis-data:
+
+networks:
+  tyk:
